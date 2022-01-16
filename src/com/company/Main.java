@@ -1,12 +1,14 @@
 package com.company;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, FileNotFoundException {
+    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException {
         Scanner sc1 = new Scanner(new File("input1.txt"));
         Scanner sc2 = new Scanner(new File("input2.txt"));
         Scanner sc3 = new Scanner(new File("input3.txt"));
@@ -108,6 +110,33 @@ public class Main {
             }
         }
         pw3.flush();
-    }
 
+        Comparator<Bug> cmp1 = new Comparator<Bug>() {
+            @Override
+            public int compare(Bug o1, Bug o2) {
+                return -(o1.report_date.compareTo(o2.report_date));
+            }
+        };
+        Collections.sort(bugs, cmp1);
+        ArrayList<Bug> task4 = new ArrayList<>();
+        PrintWriter pw4 = new PrintWriter(new File("output4.txt"));
+        for(int i = 0; i < bugs_ids.size(); i++){
+            for(int j = 0; j < bugs.size(); j++){
+                if(bugs_ids.get(i) == bugs.get(j).bug_id){
+                    task4.add(bugs.get(j));
+                }
+            }
+        }
+        Collections.sort(task4, cmp1);
+        for(int i = 0; i < task4.size(); i++){
+            if(i == task4.size() - 1){
+                pw4.print(task4.get(i).bug_title + ";" + task4.get(i).str_date);
+                break;
+            }
+            pw4.println(task4.get(i).bug_title + ";" + task4.get(i).str_date);
+        }
+        pw4.flush();
+
+
+    }
 }
